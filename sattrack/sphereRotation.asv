@@ -1,0 +1,12 @@
+clearvars;close all force;clc;
+figure(1)
+% Rotate a graphics object 180º about the x-axis.
+
+h = surf(peaks(20));
+rotate(h,[1 0 0],180)
+%% Rotate a surface graphics object 45º about its center in the z direction.
+figure(2)
+h = surf(peaks(20));
+zdir = [0 0 1];
+center = [10 10 0];
+rotate(h,zdir,45,center)

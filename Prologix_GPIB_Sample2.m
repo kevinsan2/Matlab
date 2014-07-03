@@ -22,7 +22,7 @@ sport = serial('/dev/tty.usbserial-PXHD6DXX');
 sport.Terminator = 'CR/LF';
 
 % Reduce timeout to 0.5 second (default is 10 seconds)
-sport.Timeout = .1;
+sport.Timeout = .5;
 
 % =========================================================================
 % Method #1 uses fgets to read controller response. Since the Prologix
@@ -58,37 +58,37 @@ warning('off','MATLAB:serial:fgets:unsuccessfulRead');
 fprintf(sport, '++mode 1');
 fprintf(sport, '++addr 15');
 fprintf(sport, '++auto 1');
-% fprintf(sport, 'FT1<');
-% pause(5);
-% fprintf(sport, '++spoll');
-% response = fgets(sport);
-% response = str2num(response);
-% if response == 95
-%     disp('Self-test failed');
-% elseif response == 96
-%     disp('Self-test passed');
-% end
+fprintf(sport, 'FT1<');
+pause(5);
+fprintf(sport, '++spoll');
+response = fgets(sport);
+response = str2num(response);
+if response == 95
+    disp('Self-test failed');
+elseif response == 96
+    disp('Self-test passed');
+end
 %% Commands
 %
-readPredefinedBoundaryPosition = {'Pas<', 'Pab<', 'Pes<',...
-    'Peb<', 'Pat<', 'Pet<'};
+readPredefinedBoundaryPosition = ...
+{'Pas<', 'Pab<', 'Pes<','Peb<', 'Pat<', 'Pet<'};
 readPredefinedVelocity = {'Va<', 'Ve<', 'Vz<'};
 readPredefinedDirection = {'Da<', 'De<'};
-xCommands = {'X1<','X2<','X3<'};
-loadBoundaryPosition = {'Pas', 'Pab', 'Pes',...
-    'Peb', 'Pat', 'Pet'};
+xCommands = {'X2<','X1<','X3<'};
+loadBoundaryPosition = ...
+{'Pas', 'Pab', 'Pes','Peb', 'Pat', 'Pet'};
 sendAndReceive(sport,{'Pas01839<', 'Pab34854<', 'Pes00042<',...
     'Peb10200<', 'Pat27984<', 'Pet04201<'},'l');
-sendAndReceive(sport, {'Aa2', 'Ae2'},'l')
+sendAndReceive(sport, {'Aa1', 'Ae2'},'l');
 % Send Commands
-% %
+
 pb1 = sendAndReceive(sport,readPredefinedBoundaryPosition);
 vb1 = sendAndReceive(sport,readPredefinedVelocity);
 db1 = sendAndReceive(sport,readPredefinedDirection);
-xc1 = sendAndReceive(sport,xCommands);
+xc1 = sendAndReceive(sport,xCommands,'x');
 %% Direct Mode
-fprintf(sport,'MU');
-fprintf(sport, 'L<');
+% fprintf(sport,'MU');
+% fprintf(sport, 'L<');
 
 %% Clear devices
 fprintf(sport, '++clr');

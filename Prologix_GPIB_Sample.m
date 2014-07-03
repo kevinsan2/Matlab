@@ -10,10 +10,10 @@
 % "HP54201A"
 % "2738A02659"
 % =========================================================================
-clearvars;clc;
+clearvars;clc;delete(instrfind);
 % Specify the virtual serial port created by USB driver. Other serial port
 % parameters don't matter
-sport = serial('COM4');
+sport = serial('/dev/cu.usbserial-PXHD6DXX');
 
 % Prologix Controller 4.2 requires CR as command terminator, LF is
 % optional. The controller terminates internal query responses with CR and
@@ -41,7 +41,7 @@ fprintf(sport, '++ver');
 ver = fgets(sport);
 disp(ver);
 % Close port
-fclose(sport);
+% fclose(sport);
 % =========================================================================
 % Method #2 uses fread to read instrument response. In this case we read
 % until the specified number of bytes are received or until timeout occurs.
@@ -52,7 +52,7 @@ fclose(sport);
 % Suppress "not enough data read before timeout" warning
 warning('off','MATLAB:serial:fread:unsuccessfulRead');
 
-fopen(sport);
+% fopen(sport);
 
 % Configure as Controller (++mode 1), instrument address 5, and with
 % read-after-write (++auto 1) enabled
@@ -64,14 +64,14 @@ fprintf(sport, 'IDN?')
 id = fread(sport,60);
 % Read 20 bytes or until timeout expires
 % fgets(sport);
-fclose(sport);
-
+% fclose(sport);
+% 
 % =========================================================================
 % Method #3 also uses fread to read instrument response. However, the
 % read-after-write feature is disabled and an explicit ++read command is
 % used. See Prologix Controller Manual for when to use the ++read command.
 % =========================================================================
-fopen(sport);
+% fopen(sport);
 
 % Turn off read-after-write feature
 fprintf(sport, '++auto 0');
@@ -85,26 +85,26 @@ fprintf(sport, '++read eoi');
 % Read 20 bytes or until timeout expires
 ser = fgets(sport);
 
-fclose(sport);
+% fclose(sport);
 
 %% 
 
 % Specify the virtual serial port created by USB driver. Other serial port
 % parameters don't matter
-sport = serial('COM4');
+% sport = serial('/dev/cu.usbserial-PXHD6DXX');
 
 % Prologix Controller 4.2 requires CR as command terminator, LF is
 % optional. The controller terminates internal query responses with CR and
 % LF. Responses from the instrument are passed through as is. (See Prologix
 % Controller Manual)
-sport.Terminator = 'CR/LF';
-%set(sport,'BaudRate',9600,'Terminator','LF','Parity','None');
-% Reduce timeout to 0.5 second (default is 10 seconds)
-sport.Timeout = 10;
-
-% Open virtual serial port. If a port is not available, use fclose(instrfind) and try again or exit
-% matlab and plug the usb device out and in before starting matlab again.
-fopen(sport);
+% sport.Terminator = 'CR/LF';
+% %set(sport,'BaudRate',9600,'Terminator','LF','Parity','None');
+% % Reduce timeout to 0.5 second (default is 10 seconds)
+% sport.Timeout = 10;
+% 
+% % Open virtual serial port. If a port is not available, use fclose(instrfind) and try again or exit
+% % matlab and plug the usb device out and in before starting matlab again.
+% fopen(sport);
 
 
 
@@ -131,15 +131,15 @@ disp(ver);
 % clc
 % fprintf(sport, 'FT1<');
 
-fprintf(sport, 'X4<');
+fprintf(sport, 'X1<');
 
 % Read and display response
 ver = fscanf(sport);
 % disp(ver);
 
 %% S READ command; Read parameters (Previously lodaded by load)
-fprintf(sport, 'H<')
-fprintf(sport, 'S<');
+% fprintf(sport, 'H<')
+% fprintf(sport, 'S<');
 
 % Read and display response
 % ver = fgets(sport);

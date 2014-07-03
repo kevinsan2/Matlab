@@ -1,8 +1,11 @@
 function displayEventMessage( response )
 % Displays event messages from Table 2.5
-if isstr(response)
+casesiwant = {findstr(response,'S'), findstr(response,'D'),...
+    findstr(response,'B'), findstr(response,'X')};
+if [casesiwant{:}] > 0
+    fprintf(response);
+else
     caseResponse = str2num(response);
-end
     switch caseResponse
         case 80
             fprintf('%g:Both limits on\n',caseResponse)
@@ -25,5 +28,6 @@ end
         otherwise
 			fprintf('%g\n',caseResponse)
     end
+end
 end
 

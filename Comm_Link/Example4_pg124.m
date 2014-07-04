@@ -9,12 +9,12 @@
 % ****************************************************************
 % The TTL Increment Pulses may be seen on a oscilloscope connected
 % to J1 connector on the rear panel
-clear all;clc;
+clear all;clc;delete(instrfind);
 sport = initializeSerialPort;
 fprintf(sport, 'H<' );		 % Turn CONTROLLER to 'STAND-BY' State
 fprintf(sport, 'L<' );       % Turn CONTROLLER to 'LOAD' State
-fprintf(sport, 'Aa3<');      % Select scan axis No:2
-fprintf(sport, 'Az3<');      % Select step axis No:0
+fprintf(sport, 'Aa2<');      % Select scan axis No:2
+fprintf(sport, 'Az2<');      % Select step axis No:0
 fprintf(sport, 'H<');
 pause(0.5);
 fprintf(sport, 'G<');
@@ -30,7 +30,7 @@ fprintf(sport, 'J00007<');		 % Set number of scans: 7
 fprintf(sport, 'I00050<');      % Increments Gap: .05 deg
 fprintf(sport, 'Fz<');  % Disable GPIB Increments
 fprintf(sport, 'Va00500<');  % Set scan velocity: half speed
-fprintf(sport, 'MN<');        % Set the motion mode : Raster_B (could be A)
+fprintf(sport, 'MN');        % Set the motion mode : Raster_B (could be A)
 fprintf(sport, 'H<');         % Return to “STAND-BY”
 pause(.5)                    % Wait 10 msec between ‘H’ & ‘G’
 fprintf(sport, 'G<');         % Turn CONTROLLER to “RUN”: Start motion
@@ -41,7 +41,7 @@ end
 count = 1;
 for i = 1:length(response)
     if length(response{i,:}{1,1}) > 4
-        dataResponse{count,:} = textscan(response{i,:}{1,1},'%2c%d%c%d%2c%d%c%d');
+        dataResponse(count,:) = textscan(response{i,:}{1,1},'%2c%2c%1c%5c%2c%2c%c%5c');
         count = count + 1;
     end
 end

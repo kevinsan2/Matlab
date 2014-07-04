@@ -58,16 +58,16 @@ warning('off','MATLAB:serial:fgets:unsuccessfulRead');
 fprintf(sport, '++mode 1');
 fprintf(sport, '++addr 15');
 fprintf(sport, '++auto 1');
-% fprintf(sport, 'FT1<');
-% pause(5);
-% fprintf(sport, '++spoll');
-% response = fgets(sport);
-% response = str2num(response);
-% if response == 95
-%     disp('Self-test failed');
-% elseif response == 96
-%     disp('Self-test passed');
-% end
+fprintf(sport, 'FT1<');
+pause(8);
+fprintf(sport, '++spoll');
+response = fgets(sport);
+response = str2num(response);
+if response == 95
+    disp('Self-test failed');
+elseif response == 96
+    disp('Self-test passed');
+end
 %% Commands
 %
 readPredefinedBoundaryPosition = ...
@@ -77,9 +77,9 @@ readPredefinedDirection = {'Da<', 'De<'};
 xCommands = {'X2<','X1<','X3<'};
 loadBoundaryPosition = ...
 {'Pas', 'Pab', 'Pes','Peb', 'Pat', 'Pet'};
-% sendAndReceive(sport,{'Pas01839<', 'Pab34854<', 'Pes00042<',...
-%     'Peb10200<', 'Pat27984<', 'Pet04201<'},'l');
-% sendAndReceive(sport, {'Aa1<', 'Ae2<'},'l');
+sendAndReceive(sport,{'Pas01839<', 'Pab34854<', 'Pes00042<',...
+    'Peb10200<', 'Pat27984<', 'Pet04201<'},'l');
+sendAndReceive(sport, {'Aa1<', 'Ae2<'},'l');
 % Send Commands
 
 pb1 = sendAndReceive(sport,readPredefinedBoundaryPosition);
@@ -87,8 +87,8 @@ vb1 = sendAndReceive(sport,readPredefinedVelocity);
 db1 = sendAndReceive(sport,readPredefinedDirection);
 xc1 = sendAndReceiveX1X2X3(sport,xCommands);
 %% Direct Mode
-fprintf(sport,'MU');
-fprintf(sport, 'L<');
+% fprintf(sport,'MU');
+% fprintf(sport, 'L<');
 
 %% Clear devices
 fprintf(sport, '++clr');
